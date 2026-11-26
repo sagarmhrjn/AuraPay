@@ -20,7 +20,7 @@ npm ci
 npm start
 ```
 
-Open [http://localhost:4200](http://localhost:4200) in your browser. The development build uses the app's mock API, so no separate backend or environment configuration is needed.
+Open [http://localhost:4200](http://localhost:4200) in your browser. The app ships with a built-in mock API (used in both development and the deployed build), so no separate backend or environment configuration is needed.
 
 ### Demo sign-in credentials
 
