@@ -1,0 +1,178 @@
+<mat-card class="portal-neutral-card overflow-hidden">
+  @if (loading()) {
+  <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
+  }
+
+  <!-- Error State with Retry Button -->
+  @if (error(); as errorMessage) {
+  <div class="p-4 text-center my-4">
+    <mat-icon class="text-danger fs-1 mb-2" style="width: 48px; height: 48px;">warning</mat-icon>
+    <h5 class="fw-bold text-dark">Data Retrieval Error</h5>
+    <p class="text-muted small max-w-md mx-auto mb-3">{{ errorMessage }}</p>
+    <button mat-stroked-button color="warn" type="button" (click)="onRetry()">
+      <mat-icon>refresh</mat-icon>
+      <span>Retry Request</span>
+    </button>
+  </div>
+  } @else if (applications().length === 0 && !loading()) {
+  <!-- Empty State -->
+  <div class="p-5 text-center my-4">
+    <mat-icon class="text-secondary fs-1 mb-2" style="width: 48px; height: 48px;">inbox</mat-icon>
+    <h5 class="fw-bold text-dark">No Applications Found</h5>
+    <p class="text-muted small mb-3">
+      No merchant applications match the selected criteria or role filter.
+    </p>
+    <button mat-stroked-button color="primary" type="button" (click)="onClearFilters()">
+      Clear Filters
+    </button>
+  </div>
+  } @else {
+  <!-- Data Table -->
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle mb-0">
+      <thead class="table-light text-uppercase small text-secondary">
+        <tr>
+          <th style="width: 5%;">#</th>
+          <th style="width: 14%;">App ID</th>
+          <th style="width: 23%;">Merchant / DBA</th>
+          <th style="width: 13%;">Sales Rep</th>
+          <th style="width: 11%;">Risk Tier</th>
+          <th style="width: 12%;">Status</th>
+          <th style="width: 11%;">Assigned To</th>
+          <th style="width: 11%; text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (app of applications(); track app.id; let idx = $index) {
+        <tr>
+          <!-- Row Index / Serial Number -->
+          <td class="text-secondary small fw-medium">
+            {{ getRowIndex(idx) }}
+          </td>
+
+          <!-- ID -->
+          <td>
+            <a [routerLink]="['/applications', app.id]" class="fw-semibold font-monospace text-decoration-none">
+              {{ app.id }}
+            </a>
+          </td>
+
+          <!-- Merchant & DBA -->
+          <td>
+            <div class="fw-semibold text-dark">{{ app.businessProfile.legalName }}</div>
+            @if (app.businessProfile.dbaName) {
+            <div class="text-muted small fw-medium">DBA: {{ app.businessProfile.dbaName }}</div>
+            }
+          </td>
+
+          <!-- Sales Rep -->
+          <td>
+            <div class="small text-dark">{{ app.salesRepName }}</div>
+          </td>
+
+          <!-- Risk Tier -->
+          <td>
+            <app-status-badge [riskTier]="app.riskAssessment.riskTier" />
+          </td>
+
+          <!-- Status -->
+          <td>
+            <app-status-badge [status]="app.status" />
+          </td>
+
+          <!-- Assigned Reviewer -->
+          <td>
+            @if (app.assignedReviewerName) {
+            <span class="small text-dark d-flex align-items-center gap-1">
+              <mat-icon class="text-success" style="font-size: 16px; width: 16px; height: 16px;">how_to_reg</mat-icon>
+              <span>{{ app.assignedReviewerName }}</span>
+            </span>
+            } @else {
+            <span class="text-muted small fst-italic">Unassigned</span>
+            }
+          </td>
+
+          <!-- Permission-Aware Actions -->
+          <td class="text-end">
+            <div class="d-inline-flex gap-1">
+              <!-- View Details (Always available if permitted) -->
+              <a mat-icon-button [routerLink]="['/applications', app.id]" matTooltip="View Application Details">
+                <mat-icon>visibility</mat-icon>
+              </a>
+
+              <!-- Edit permitted applications -->
+              @if (authService.canEditApplication(app)) {
+              <a mat-icon-button color="primary" [routerLink]="['/applications', app.id, 'edit']"
+                matTooltip="Edit Application">
+                <mat-icon>edit</mat-icon>
+              </a>
+              }
+
+              <!-- Review Action (REVIEWER & ADMIN only) -->
+              @if (authService.hasPermission('CAN_RECORD_RISK_DECISION') && app.status !== 'APPROVED' && app.status
+              !== 'REJECTED') {
+              <a mat-icon-button color="accent" [routerLink]="['/applications', app.id]"
+                [queryParams]="{ mode: 'review' }" matTooltip="Underwrite / Record Decision">
+                <mat-icon class="text-success">rate_review</mat-icon>
+              </a>
+              }
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Server-Side Pagination Footer -->
+  <div class="p-3 border-top bg-light d-flex flex-wrap align-items-center justify-content-between gap-2">
+    <div class="text-muted small">
+      Showing
+      <strong>{{ getStartIndex() }}</strong>
+      to
+      <strong>{{ getEndIndex() }}</strong>
+      of
+      <strong>{{ totalItems() }}</strong> merchants
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <!-- Page Size Selector -->
+      <div class="d-flex align-items-center gap-1.5 small text-secondary">
+        <span>Per page:</span>
+        <select class="form-select form-select-sm" style="width: 70px;" [ngModel]="pageSize()"
+          (ngModelChange)="onPageSizeSelect($event)">
+          <option [value]="5">5</option>
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+        </select>
+      </div>
+
+      <!-- Pagination buttons -->
+      <nav aria-label="Pagination">
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item" [class.disabled]="currentPage() <= 1">
+            <button class="page-link" type="button" (click)="onPageClick(currentPage() - 1)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+          </li>
+
+          @for (page of getPageNumbers(); track page) {
+          <li class="page-item" [class.active]="page === currentPage()">
+            <button class="page-link" type="button" (click)="onPageClick(page)">
+              {{ page }}
+            </button>
+          </li>
+          }
+
+          <li class="page-item"
+            [class.disabled]="currentPage() >= totalPages()">
+            <button class="page-link" type="button" (click)="onPageClick(currentPage() + 1)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  }
+</mat-card>

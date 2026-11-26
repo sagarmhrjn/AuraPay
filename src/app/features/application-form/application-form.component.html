@@ -1,0 +1,126 @@
+<div class="container py-4">
+  <!-- Header with Auto-Save Status -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2">
+        <a mat-button routerLink="/applications" class="px-0">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Dashboard</span>
+        </a>
+      </div>
+      <h1 class="h3 fw-bold text-dark mb-0">
+        {{ isEditMode ? 'Edit Merchant Application' : 'New Merchant Application' }}
+      </h1>
+      <p class="text-secondary small mb-0">
+        {{ isEditMode ? 'Update saved draft application' : 'Intake application for Nepal Rastra Bank (NRB) compliant underwriting' }}
+      </p>
+    </div>
+
+    <!-- Auto-Save Status Badge & Manual Save Button -->
+    <div class="d-flex align-items-center gap-2">
+      @switch (autoSave.status()) {
+        @case ('SAVING') {
+          <span class="badge bg-warning text-dark d-inline-flex align-items-center gap-1 py-2 px-3">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px;">sync</mat-icon>
+            Auto-saving...
+          </span>
+        }
+        @case ('SAVED') {
+          <span class="badge bg-success-subtle text-success border border-success d-inline-flex align-items-center gap-1 py-2 px-3">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px;">check_circle</mat-icon>
+            Draft Saved
+          </span>
+        }
+        @case ('ERROR') {
+          <span class="badge bg-danger-subtle text-danger border border-danger d-inline-flex align-items-center gap-1 py-2 px-3">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px;">error_outline</mat-icon>
+            Auto-save Failed
+          </span>
+        }
+      }
+
+      <button mat-stroked-button type="button" (click)="saveDraftManual()" [disabled]="autoSave.status() === 'SAVING'">
+        <mat-icon>save</mat-icon>
+        <span>Save Draft</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Step Tracker -->
+  <mat-card class="mb-4 portal-neutral-card">
+    <mat-card-content class="p-3">
+      <div class="row text-center g-2">
+        @for (step of steps; track step.index) {
+          <div class="col-6 col-md-3">
+            <button
+              type="button"
+              class="btn w-100 py-2 d-flex align-items-center justify-content-center gap-2"
+              [class.btn-primary]="currentStep() === step.index"
+              [class.btn-outline-secondary]="currentStep() !== step.index"
+              (click)="goToStep(step.index)"
+            >
+              <span class="badge rounded-pill" [class.bg-light]="currentStep() === step.index" [class.text-dark]="currentStep() === step.index" [class.bg-secondary]="currentStep() !== step.index">
+                {{ step.index }}
+              </span>
+              <span class="fw-semibold small">{{ step.title }}</span>
+            </button>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Main Wizard Form -->
+  <form [formGroup]="wizardForm" (ngSubmit)="onSubmit()">
+    <!-- STEP 1: BUSINESS PROFILE -->
+    @if (currentStep() === 1) {
+      <app-application-business-step [group]="businessProfileGroup" />
+    }
+
+    <!-- STEP 2: PRINCIPAL & KYC -->
+    @if (currentStep() === 2) {
+      <app-application-principal-step [group]="principalProfileGroup" />
+    }
+
+    <!-- STEP 3: PROCESSING & BANKING -->
+    @if (currentStep() === 3) {
+      <app-application-processing-step [group]="processingProfileGroup" [banks]="nepalBanks" />
+    }
+
+    <!-- STEP 4: REVIEW & SUBMIT -->
+    @if (currentStep() === 4) {
+      <app-application-review-step [form]="wizardForm" />
+    }
+
+    <!-- Bottom Navigation Bar -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <button mat-stroked-button type="button" (click)="prevStep()" [disabled]="currentStep() === 1">
+        <mat-icon>arrow_back</mat-icon>
+        <span>Previous</span>
+      </button>
+
+      <div class="d-flex gap-2">
+        @if (currentStep() < 4) {
+          <button mat-flat-button color="primary" type="button" (click)="nextStep()">
+            <span>Continue</span>
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        } @else {
+          <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting || wizardForm.invalid">
+            @if (isSubmitting) {
+              <span>
+                <mat-icon class="spinner-border spinner-border-sm">sync</mat-icon>
+                <span>Submitting...</span>
+              </span>
+            } @else {
+              <span>
+                <mat-icon>send</mat-icon>
+                <span>Submit Application</span>
+              </span>
+            }
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,142 @@
+<!-- Trigger Button -->
+<button mat-button type="button" class="csp-trigger-btn px-2 px-sm-3 d-inline-flex align-items-center"
+  (click)="openModal()" matTooltip="Content Security Policy & Defense Architecture">
+  <mat-icon class="text-info me-1"
+    style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">security</mat-icon>
+  <span>CSP Security</span>
+</button>
+
+<!-- Modal Backdrop & Dialog -->
+@if (isOpen()) {
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(15, 23, 42, 0.7);"
+  (click)="closeModal()">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable csp-modal-dialog"
+    (click)="$event.stopPropagation()">
+    <div class="modal-content shadow-lg border-0 rounded-3">
+      <!-- Header -->
+      <div
+        class="modal-header bg-dark text-white border-bottom border-secondary py-2.5 px-3 px-sm-4 d-flex align-items-center justify-content-between gap-2">
+        <div class="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
+          <mat-icon class="text-info flex-shrink-0"
+            style="font-size: 22px; width: 22px; height: 22px;">verified_user</mat-icon>
+          <div class="min-w-0 flex-grow-1">
+            <h5 class="modal-title mb-0 fs-6 fw-bold text-break" style="line-height: 1.3;">
+              Content Security Policy (CSP)
+            </h5>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white flex-shrink-0" (click)="closeModal()"
+          aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body p-3 p-sm-4 csp-modal-body">
+        <!-- Executive Summary Alert Box -->
+        <div class="alert alert-primary d-flex align-items-start gap-2 gap-sm-3 mb-3 mb-sm-4 p-3 rounded-3">
+          <mat-icon class="text-primary mt-0.5 flex-shrink-0"
+            style="font-size: 20px; width: 20px; height: 20px;">info</mat-icon>
+          <div class="flex-grow-1 min-w-0">
+            <h6 class="alert-heading fw-bold mb-1 fs-6 text-break">Defense-in-Depth for Merchant Payments (NRB & PCI
+              Compliance)</h6>
+            <p class="mb-0 small fs-6 text-wrap">
+              In a merchant payments portal, client-side security is top priority. Sensitive PII (Citizenship
+              numbers, PANs)
+              and banking credentials (NCHL clearing & account numbers) are targets for Magecart, form-jacking, and XSS
+              attacks.
+              Content Security Policy (CSP) restricts executable script origins, prevents malicious exfiltration, and
+              enforces Nepal Rastra Bank (NRB) Payment Systems Directives and PCI-DSS v4.0 requirements.
+            </p>
+          </div>
+        </div>
+
+        <!-- Recommended Production Directives Table -->
+        <h6 class="fw-bold text-uppercase text-secondary small mb-2 mb-sm-3 d-flex align-items-center gap-1">
+          <mat-icon class="text-info fs-6" style="width: 18px; height: 18px;">code</mat-icon>
+          <span>Recommended HTTP Response Header Directives</span>
+        </h6>
+        <div class="csp-table-wrapper mb-3 mb-sm-4 border rounded-3 w-100">
+          <table class="table table-bordered table-sm align-middle small mb-0 csp-directives-table w-100">
+            <thead class="table-light">
+              <tr>
+                <th scope="col" style="width: 28%;">Directive</th>
+                <th scope="col" style="width: 38%;">Value</th>
+                <th scope="col" style="width: 34%;">Mitigation Target</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code class="text-primary fw-semibold">default-src</code></td>
+                <td><code>'self'</code></td>
+                <td class="text-muted">Fallback policy blocks unauthorized remote assets</td>
+              </tr>
+              <tr>
+                <td><code class="text-primary fw-semibold">script-src</code></td>
+                <td><code>'self' 'nonce-$request_id'</code></td>
+                <td class="text-muted">Neutralizes DOM/Stored XSS injection; rejects unsafe-eval</td>
+              </tr>
+              <tr>
+                <td><code class="text-primary fw-semibold">style-src</code></td>
+                <td><code>'self' https://fonts.googleapis.com</code></td>
+                <td class="text-muted">Allows local and trusted stylesheets</td>
+              </tr>
+              <tr>
+                <td><code class="text-primary fw-semibold">font-src</code></td>
+                <td><code>'self' https://fonts.gstatic.com data:</code></td>
+                <td class="text-muted">Restricts web font sources to local and verified hosts</td>
+              </tr>
+              <tr>
+                <td><code class="text-primary fw-semibold">connect-src</code></td>
+                <td><code>'self' https://api.payments.np wss:</code></td>
+                <td class="text-muted">Prevents credential and PII data exfiltration to external origins</td>
+              </tr>
+              <tr>
+                <td><code class="text-primary fw-semibold">frame-ancestors</code></td>
+                <td><code>'none'</code></td>
+                <td class="text-muted">Eliminates Clickjacking and iframe UI redressing attacks</td>
+              </tr>
+              <tr>
+                <td><code class="text-primary fw-semibold">form-action</code></td>
+                <td><code>'self'</code></td>
+                <td class="text-muted">Guarantees forms and auth tokens cannot POST to foreign sites</td>
+              </tr>
+              <tr>
+                <td><code class="text-primary fw-semibold">base-uri</code></td>
+                <td><code>'self'</code></td>
+                <td class="text-muted">Prevents HTML &lt;base&gt; tag hijacking for relative links</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Server Config Snippet -->
+        <h6 class="fw-bold text-uppercase text-secondary small mb-2 d-flex align-items-center gap-1">
+          <mat-icon class="text-success fs-6" style="width: 18px; height: 18px;">terminal</mat-icon>
+          <span>Production Reverse Proxy / Edge Header Configuration</span>
+        </h6>
+        <pre class="csp-code-pre mb-2"><span class="text-secondary"># Nginx or Cloudflare Edge Response Header</span>
+<span class="text-info">add_header Content-Security-Policy "</span>
+  <span class="text-warning">default-src 'self';</span>
+  <span class="text-warning">script-src 'self' 'nonce-$request_id';</span>
+  <span class="text-warning">style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;</span>
+  <span class="text-warning">font-src 'self' https://fonts.gstatic.com data:;</span>
+  <span class="text-warning">img-src 'self' data: https://images.unsplash.com;</span>
+  <span class="text-warning">connect-src 'self' https://api.aurapay.np wss://*.aurapay.np;</span>
+  <span class="text-warning">frame-ancestors 'none';</span>
+  <span class="text-warning">form-action 'self';</span>
+  <span class="text-warning">base-uri 'self';</span>
+  <span class="text-warning">report-uri https://telemetry.aurapay.np/csp-reports;</span>
+<span class="text-info">" always;</span></pre>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="modal-footer bg-light border-top py-2 px-3 px-sm-4 d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center justify-content-between gap-2">
+        <button mat-flat-button color="primary" type="button" (click)="closeModal()"
+          class="w-100 w-sm-auto flex-shrink-0">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}

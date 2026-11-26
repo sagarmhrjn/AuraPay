@@ -1,0 +1,36 @@
+@use 'variables' as *;
+
+.login-wrapper {
+  background: linear-gradient(135deg, $slate-50 0%, $slate-200 100%);
+  min-height: 100vh;
+}
+
+.brand-badge {
+  width: $logo-size-lg;
+  height: $logo-size-lg;
+  border-radius: $radius-xl;
+  background: rgba($color-brand-blue, 0.1);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.persona-card {
+  transition: $transition-normal;
+  background-color: $color-white;
+
+  &:hover {
+    background-color: $slate-50;
+    border-color: $color-brand-blue;
+    transform: translateY(-1px);
+    box-shadow: $shadow-md;
+  }
+}
+
+.persona-icon {
+  width: $button-height-md;
+  height: $button-height-md;
+  background: $slate-100;
+  flex-shrink: 0;
+}

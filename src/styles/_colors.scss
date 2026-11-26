@@ -1,0 +1,51 @@
+// AuraPay Design System - Color Palette & Theme Tokens
+
+// Primary Brand Palette
+$color-primary: #1565c0;          // Material Blue 800 (AuraPay primary brand color)
+$color-primary-dark: #0d47a1;     // Material Blue 900
+$color-primary-light: #1976d2;    // Blue 700 - active filter borders, focus indicators
+$color-primary-subtle: #f0f7ff;   // Light blue tint - active cards
+$color-brand-blue: #1a56db;       // Persona & badge accent blue
+$color-brand-accent: #2563eb;     // Accent blue for brand logo
+
+// Neutral Slate Palette (Tailwind / Modern Dashboard standard)
+$slate-900: #0f172a;              // Dark navy toolbar, dark modal header, terminal background
+$slate-800: #1e293b;              // Body text, toolbar gradient end
+$slate-700: #334155;              // Code pre borders, dark cards
+$slate-600: #475569;              // Trace console scrollbar thumb
+$slate-500: #64748b;              // Subtitles, table headers, secondary icons
+$slate-400: #94a3b8;              // Scrollbar thumb hover, muted borders
+$slate-300: #cbd5e1;              // Scrollbar thumb normal
+$slate-200: #e2e8f0;              // Default card & section borders, timeline line
+$slate-100: #f1f5f9;              // Persona icons, scrollbar tracks, subtle tags
+$slate-50:  #f8fafc;              // Portal background, light hover states
+
+$color-white: #ffffff;
+$color-black: #000000;
+
+// Semantic & Status Palette
+$color-success: #10b981;          // Emerald 500 - Approved, Active, Connected, Step Completed
+$color-success-dark: #059669;
+$color-success-light: #d1fae5;
+$color-success-bg: rgba(16, 185, 129, 0.1);
+
+$color-warning: #f59e0b;          // Amber 500 - Under Review, Connecting, Info Requested
+$color-warning-dark: #d97706;
+$color-warning-light: #fef3c7;
+$color-warning-bg: rgba(245, 158, 11, 0.1);
+
+$color-danger: #ef4444;           // Rose/Red 500 - Rejected, Disconnected, Error, Revealed PII
+$color-danger-dark: #dc2626;
+$color-danger-light: #fee2e2;
+$color-danger-bg: rgba(239, 68, 68, 0.1);
+
+$color-info: #0ea5e9;             // Sky/Info 500 - Submitted, Telemetry, Security icons
+$color-info-dark: #0284c7;
+$color-info-light: #e0f2fe;
+
+// Surface & Portal Tokens
+$surface-page: $slate-50;
+$surface-card: $color-white;
+$surface-border: $slate-200;
+$surface-text: $slate-800;
+$surface-text-muted: $slate-500;

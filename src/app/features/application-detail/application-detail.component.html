@@ -1,0 +1,125 @@
+<div class="container py-4">
+  @if (loading()) {
+  <div class="text-center py-5">
+    <mat-progress-bar mode="indeterminate" class="mb-3"></mat-progress-bar>
+    <div class="text-secondary small">Loading merchant application...</div>
+  </div>
+  } @else if (error()) {
+  <mat-card class="portal-neutral-card border border-danger p-4 text-center">
+    <mat-card-content>
+      <mat-icon class="text-danger mb-2" style="font-size: 48px; width: 48px; height: 48px;">error</mat-icon>
+      <h2 class="h5 fw-bold text-danger mb-2">Failed to Load Application</h2>
+      <p class="text-secondary mb-3">{{ error() }}</p>
+      <a mat-flat-button color="primary" routerLink="/applications">
+        <mat-icon>arrow_back</mat-icon>
+        <span>Return to Dashboard</span>
+      </a>
+    </mat-card-content>
+  </mat-card>
+  } @else if (application(); as app) {
+  <!-- Top Action & Meta Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <a mat-button routerLink="/applications" class="px-0">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Dashboard</span>
+        </a>
+        <span class="text-muted">/</span>
+        <span class="font-monospace small fw-semibold text-secondary">{{ app.id }}</span>
+      </div>
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <h1 class="h3 fw-bold text-dark mb-0">{{ app.businessProfile.legalName }}</h1>
+        <app-status-badge [status]="app.status" />
+        <app-status-badge [riskTier]="app.riskAssessment.riskTier" />
+      </div>
+      <p class="text-secondary small mb-0">
+        Sales Officer: <strong>{{ app.salesRepName }}</strong> &bull;
+        Reviewer: <strong>{{ app.assignedReviewerName || 'Unassigned' }}</strong> &bull;
+        Submitted: {{ app.submittedAt ? (app.submittedAt | date: 'short') : 'In Draft' }}
+      </p>
+    </div>
+
+    <div class="d-flex gap-2">
+      @if (authService.canEditApplication(app)) {
+      <a mat-stroked-button color="primary" [routerLink]="['/applications', app.id, 'edit']">
+        <mat-icon>edit</mat-icon>
+        <span>Edit Application</span>
+      </a>
+      }
+      @if (authService.hasPermission('CAN_MANAGE_ASSIGNMENTS')) {
+      <button mat-stroked-button type="button" (click)="openAssignModal()">
+        <mat-icon>assignment_ind</mat-icon>
+        <span>Assign</span>
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- Main Content Layout -->
+  <div class="row g-4">
+    <!-- Application profile -->
+    <div
+      class="col-12 d-flex flex-column gap-3"
+      [class.col-lg-7]="authService.userRole() !== 'SALES'"
+      [class.col-lg-12]="authService.userRole() === 'SALES'"
+    >
+      <app-application-profile
+        [application]="app"
+        [canRevealSensitiveData]="authService.canEditApplication(app)"
+      />
+    </div>
+
+    @if (authService.userRole() !== 'SALES') {
+    <!-- Decisioning & Audit -->
+    <div class="col-lg-5 d-flex flex-column gap-3">
+      <app-application-decision-panel
+        [canRecordDecision]="authService.hasPermission('CAN_RECORD_RISK_DECISION')"
+        [isSubmitting]="isSubmittingDecision()"
+        [(decisionAction)]="decisionAction"
+        [(assignedTier)]="assignedTier"
+        [(approvedLimit)]="approvedLimit"
+        [(decisionNote)]="decisionNote"
+        (submit)="submitDecision()"
+      />
+      <app-application-audit-timeline [entries]="app.riskAssessment.decisionHistory" />
+    </div>
+    }
+  </div>
+
+  @if (isAssignModalOpen()) {
+  <div class="assignment-dialog-backdrop" (click)="closeAssignModal()">
+    <section class="assignment-dialog" role="dialog" aria-modal="true" aria-labelledby="assign-reviewer-title"
+      tabindex="-1" (click)="$event.stopPropagation()" (keydown.escape)="closeAssignModal()">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 id="assign-reviewer-title" class="h5 fw-bold mb-0">Assign Reviewer</h2>
+        <button mat-icon-button type="button" aria-label="Close assignment dialog" (click)="closeAssignModal()"
+          [disabled]="isAssigning()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <p class="text-secondary small">
+        Select a reviewer for application <strong>{{ app.id }}</strong>.
+      </p>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Reviewer</mat-label>
+        <mat-select [(ngModel)]="selectedReviewerId" [disabled]="isAssigning()">
+          @for (reviewer of reviewers; track reviewer.id) {
+          <mat-option [value]="reviewer.id">{{ reviewer.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button mat-button type="button" (click)="closeAssignModal()" [disabled]="isAssigning()">Cancel</button>
+        <button mat-flat-button color="primary" type="button" (click)="confirmAssignment()" [disabled]="isAssigning()">
+          {{ isAssigning() ? 'Assigning...' : 'Assign Reviewer' }}
+        </button>
+      </div>
+    </section>
+  </div>
+  }
+  }
+</div>

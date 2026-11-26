@@ -1,0 +1,166 @@
+// AuraPay Merchant Payments Portal - Angular Material Design Theme & Global Styles
+@use 'variables' as *;
+
+@import "@angular/material/prebuilt-themes/azure-blue.css";
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+// Gilmer Font Face Declarations (Self-hosted locally for zero CORS errors and optimal performance)
+@font-face {
+  font-family: 'Gilmer';
+  src: url('/fonts/Gilmer-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilmer';
+  src: url('/fonts/Gilmer-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilmer';
+  src: url('/fonts/Gilmer-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilmer';
+  src: url('/fonts/Gilmer-Heavy.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+$material-typography-roles: (
+  body-large,
+  body-medium,
+  body-small,
+  display-large,
+  display-medium,
+  display-small,
+  headline-large,
+  headline-medium,
+  headline-small,
+  label-large,
+  label-medium,
+  label-small,
+  title-large,
+  title-medium,
+  title-small
+);
+
+html {
+  @each $role in $material-typography-roles {
+    --mat-sys-#{$role}: var(--mat-sys-#{$role}-weight) var(--mat-sys-#{$role}-size) / var(--mat-sys-#{$role}-line-height) #{$font-family-primary};
+    --mat-sys-#{$role}-font: #{$font-family-primary};
+  }
+}
+
+:root {
+  --portal-primary: #{$color-primary};
+  --portal-secondary: #{$slate-900};
+  --portal-surface: #{$surface-page};
+  --portal-card-bg: #{$surface-card};
+  --portal-border: #{$surface-border};
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: $font-family-primary;
+  background-color: var(--portal-surface);
+  color: $surface-text;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: $font-family-headings;
+  letter-spacing: $letter-spacing-heading;
+}
+
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button,
+.mat-toolbar,
+.mat-mdc-card-title,
+.mat-mdc-card-subtitle,
+.mat-mdc-header-cell,
+.btn {
+  font-family: $font-family-headings;
+}
+
+// Dark Navy styling for portal-secondary Material buttons
+.mat-mdc-flat-button.mat-portal-secondary,
+.mat-mdc-unelevated-button.mat-portal-secondary,
+a[mat-flat-button][color='portal-secondary'],
+button[mat-flat-button][color='portal-secondary'],
+[mat-flat-button][color='portal-secondary'] {
+  --mdc-filled-button-container-color: #{$slate-900};
+  --mdc-filled-button-label-text-color: #{$color-white};
+  background-color: $slate-900;
+  color: $color-white;
+
+  .mat-icon {
+    color: $color-white;
+  }
+
+  &:hover {
+    --mdc-filled-button-container-color: #{$slate-800};
+    background-color: $slate-800;
+    color: $color-white;
+  }
+}
+
+// Material Design elevation & card refinements (cascades naturally over prebuilt theme)
+.mat-mdc-card {
+  border-radius: $radius-lg;
+  border: 1px solid var(--portal-border);
+  box-shadow: $shadow-sm;
+  background: $surface-card;
+}
+
+.mat-mdc-card.portal-neutral-card:not(.active-filter) {
+  background-color: $slate-50;
+}
+
+.dashboard-filter-card .mat-mdc-form-field {
+  --mat-form-field-outlined-outline-color: #{$slate-300};
+  --mat-form-field-outlined-hover-outline-color: #{$slate-400};
+  --mat-form-field-outlined-focus-outline-color: #{$slate-400};
+}
+
+.mat-mdc-table {
+  background: transparent;
+}
+
+.mat-mdc-header-cell {
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  text-transform: uppercase;
+  color: $surface-text-muted;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.font-monospace {
+  font-family: $font-family-mono !important; // overrides Bootstrap's utility !important
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

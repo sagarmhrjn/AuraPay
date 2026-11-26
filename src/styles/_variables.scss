@@ -1,0 +1,9 @@
+// AuraPay Central Sass Variables Index
+// Forwards all design system tokens and mixins for clean modular imports:
+// @use 'variables' as *;
+
+@forward './colors';
+@forward './typography';
+@forward './spacing';
+@forward './effects';
+@forward './mixins';

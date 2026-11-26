@@ -1,0 +1,231 @@
+<div class="container-fluid px-3 px-md-4 py-4" style="max-width: 1200px;">
+  <!-- Page Header -->
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+      <h2 class="h3 fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+        <mat-icon class="text-primary">shield</mat-icon>
+        <span>Security & HTTP 401 Refresh Sandbox</span>
+      </h2>
+      <p class="text-muted small mb-0">
+        Interactive verification of Bearer token attachment, concurrent 401 mutex deduplication, role security, and CSP.
+      </p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <app-csp-info-modal />
+    </div>
+  </div>
+
+  <!-- Overview Material Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <mat-card class="portal-neutral-card h-100 p-3">
+        <div class="d-flex align-items-center gap-2 mb-2 text-primary">
+          <mat-icon>key</mat-icon>
+          <h6 class="fw-bold mb-0">Bearer Token Attachment</h6>
+        </div>
+        <p class="small text-muted mb-2">
+          Every protected HTTP request is intercepted by <b>authInterceptor</b>, which injects the active JWT in the <b>Authorization: Bearer</b> header.
+        </p>
+        <div class="bg-light p-2 rounded small font-monospace text-truncate">
+          Token: {{ authService.accessToken() || 'No Token' }}
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="col-md-4">
+      <mat-card class="portal-neutral-card h-100 p-3">
+        <div class="d-flex align-items-center gap-2 mb-2 text-warning">
+          <mat-icon class="text-warning">sync</mat-icon>
+          <h6 class="fw-bold mb-0">Concurrent 401 Mutex</h6>
+        </div>
+        <p class="small text-muted mb-2">
+          When multiple parallel requests fail with 401 Unauthorized, a single <b>POST /auth/refresh</b> is executed while concurrent requests wait on a <b>BehaviorSubject</b>.
+        </p>
+        <div class="bg-light p-2 rounded small font-monospace">
+          Single Refresh Endpoint: POST /auth/refresh
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="col-md-4">
+      <mat-card class="portal-neutral-card h-100 p-3">
+        <div class="d-flex align-items-center gap-2 mb-2 text-info">
+          <mat-icon class="text-info">fingerprint</mat-icon>
+          <h6 class="fw-bold mb-0">Role & Data Masking</h6>
+        </div>
+        <p class="small text-muted mb-2">
+          Active User: <strong>{{ authService.currentUser()?.name ?? 'Guest' }}</strong>
+          (<span class="badge bg-secondary">{{ authService.userRole() ?? 'NONE' }}</span>).
+          Sensitive PII & banking numbers are masked by default with audit trails.
+        </p>
+        <div class="bg-light p-2 rounded small font-monospace">
+          Can Reveal PII: {{ authService.hasPermission('CAN_REVEAL_SENSITIVE_DATA') }}
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Interactive 401 Concurrency Simulation Test Bench -->
+  <mat-card class="portal-neutral-card mb-4 overflow-hidden">
+    @if (isRunningTest()) {
+      <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+    }
+
+    <mat-card-header class="p-3 border-bottom bg-light d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div>
+        <mat-card-title class="fs-6 fw-bold mb-0 text-dark d-flex align-items-center gap-1">
+          <mat-icon class="text-warning">bolt</mat-icon>
+          <span>Concurrent 401 Refresh Test Runner</span>
+        </mat-card-title>
+        <small class="text-muted">Simulate simultaneous expired token requests to verify single /auth/refresh deduplication</small>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          [disabled]="isRunningTest()"
+          (click)="runConcurrent401Test()"
+        >
+          @if (isRunningTest()) {
+            <mat-spinner diameter="16" class="d-inline-block me-1"></mat-spinner>
+            <span>Executing 5 Parallel Requests...</span>
+          } @else {
+            <span>
+              <mat-icon style="vertical-align: middle; margin-right: 4px;">play_arrow</mat-icon>
+              Fire 5 Concurrent 401 Requests
+            </span>
+          }
+        </button>
+        <button mat-stroked-button type="button" (click)="clearTrace()">
+          Clear Trace
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content class="p-4">
+      <!-- Simulation Metrics Dashboard -->
+      <div class="row g-3 mb-3 text-center">
+        <div class="col-6 col-md-3">
+          <div class="p-2 border rounded bg-light">
+            <div class="small text-muted">Concurrent Requests</div>
+            <div class="h4 fw-bold text-dark mb-0">{{ statsConcurrent() }}</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-2 border rounded bg-light">
+            <div class="small text-muted">401 Responses Caught</div>
+            <div class="h4 fw-bold text-danger mb-0">{{ stats401Count() }}</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-2 border rounded bg-light">
+            <div class="small text-muted">POST /auth/refresh Calls</div>
+            <div class="h4 fw-bold text-primary mb-0">{{ statsRefreshCalls() }}</div>
+            <div class="text-success small" style="font-size: 0.7rem;">(Must be exactly 1)</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-2 border rounded bg-light">
+            <div class="small text-muted">Requests Retried & Resolved</div>
+            <div class="h4 fw-bold text-success mb-0">{{ statsSuccessCount() }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Trace Log Output -->
+      <h6 class="small fw-bold text-uppercase text-secondary mb-2">Live Interceptor Execution Trace</h6>
+      <div class="trace-console bg-dark text-light p-3 rounded font-monospace small" style="max-height: 280px; overflow-y: auto;">
+        @if (traceLogs().length === 0) {
+          <div class="text-secondary fst-italic">
+            Ready. Click "Fire 5 Concurrent 401 Requests" above to execute the simulation.
+          </div>
+        } @else {
+          @for (log of traceLogs(); track $index) {
+            <div class="d-flex align-items-start gap-2 mb-1">
+              <span class="text-secondary font-monospace" style="font-size: 0.75rem;">[{{ log.timestamp }}]</span>
+              @switch (log.type) {
+                @case ('ERROR_401') {
+                  <span class="badge bg-danger">401 CAUGHT</span>
+                }
+                @case ('REFRESH_INITIATED') {
+                  <span class="badge bg-warning text-dark">MUTEX LOCK / REFRESH</span>
+                }
+                @case ('REQUEST_QUEUED') {
+                  <span class="badge bg-info text-dark">WAITING ON TOKEN</span>
+                }
+                @case ('REFRESH_SUCCESS') {
+                  <span class="badge bg-success">TOKEN REFRESHED</span>
+                }
+                @case ('RETRY_SUCCESS') {
+                  <span class="badge bg-primary">RETRY 200 OK</span>
+                }
+                @default {
+                  <span class="badge bg-secondary">INFO</span>
+                }
+              }
+              <span class="text-light">{{ log.message }}</span>
+            </div>
+          }
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Security Audit Event Stream -->
+  <mat-card class="portal-neutral-card">
+    <mat-card-header class="p-3 border-bottom bg-light d-flex align-items-center justify-content-between">
+      <mat-card-title class="fs-6 fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+        <mat-icon class="text-primary">policy</mat-icon>
+        <span>Security Audit Events & Reveal Log</span>
+      </mat-card-title>
+      <button mat-stroked-button type="button" (click)="clearAudit()">Clear Log</button>
+    </mat-card-header>
+
+    <mat-card-content class="p-0">
+      @if (auditService.events().length === 0) {
+        <div class="p-4 text-center text-muted small">
+          No security events recorded in this session.
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-hover table-sm align-middle mb-0 small">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 18%;">Timestamp</th>
+                <th style="width: 14%;">Actor</th>
+                <th style="width: 10%;">Role</th>
+                <th style="width: 20%;">Security Action</th>
+                <th style="width: 38%;">Event Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (ev of auditService.events(); track ev.id) {
+                <tr>
+                  <td class="font-monospace text-muted">{{ ev.timestamp | date: 'HH:mm:ss.SSS' }}</td>
+                  <td class="fw-semibold text-dark">{{ ev.userName }}</td>
+                  <td>
+                    <span class="badge bg-secondary-subtle text-secondary">{{ ev.userRole }}</span>
+                  </td>
+                  <td>
+                    @if (ev.action.includes('DENIED')) {
+                      <span class="badge bg-danger">{{ ev.action }}</span>
+                    } @else if (ev.action.includes('REVEAL')) {
+                      <span class="badge bg-warning text-dark">{{ ev.action }}</span>
+                    } @else if (ev.action.includes('REFRESH')) {
+                      <span class="badge bg-primary">{{ ev.action }}</span>
+                    } @else {
+                      <span class="badge bg-info text-dark">{{ ev.action }}</span>
+                    }
+                  </td>
+                  <td class="text-secondary">{{ ev.details }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

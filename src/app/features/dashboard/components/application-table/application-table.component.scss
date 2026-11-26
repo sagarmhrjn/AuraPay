@@ -1,0 +1,37 @@
+@use 'variables' as *;
+
+.max-w-md {
+  max-width: 28rem;
+}
+
+.table {
+  --bs-table-striped-bg: #f3f4f6;
+}
+
+.table > :not(caption) > * > * {
+  border-bottom: 0;
+}
+
+.table > :not(caption) > * > *:not(:last-child) {
+  border-right: 1px solid $slate-200;
+}
+
+.pagination .page-link {
+  color: $slate-900;
+
+  &:hover {
+    color: $color-white;
+    background-color: $slate-800;
+    border-color: $slate-800;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.25rem rgba($slate-900, 0.25);
+  }
+}
+
+.pagination .page-item.active .page-link {
+  color: $color-white;
+  background-color: $slate-900;
+  border-color: $slate-900;
+}

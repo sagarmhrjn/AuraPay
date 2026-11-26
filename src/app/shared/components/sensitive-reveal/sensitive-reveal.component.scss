@@ -1,0 +1,19 @@
+@use 'variables' as *;
+
+.sensitive-reveal-box {
+  font-size: $font-size-base;
+  border-radius: $radius-md;
+}
+button.reveal-action-btn {
+  height: $button-height-xs;
+  padding: 0 8px;
+  font-size: $font-size-xs;
+  line-height: 26px;
+}
+mat-icon.action-icon {
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  margin-right: 4px;
+}

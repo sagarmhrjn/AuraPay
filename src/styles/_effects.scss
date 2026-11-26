@@ -1,0 +1,28 @@
+// AuraPay Design System - Effects, Shadows & Breakpoints
+
+// Transitions
+$transition-fast: 0.15s ease;
+$transition-normal: 0.2s ease-in-out;
+$transition-smooth: all 0.2s ease;
+
+// Shadows & Elevations
+$shadow-xs: 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+$shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+$shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+$shadow-modal: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+$shadow-glow-success: 0 0 6px #10b981;
+$shadow-focus-ring: 0 0 0 4px rgba(21, 101, 192, 0.2);
+
+// Responsive Viewport Breakpoints
+$breakpoint-xs: 575.98px;
+$breakpoint-sm: 767.98px;
+$breakpoint-md: 991.98px;
+$breakpoint-lg: 1199.98px;
+
+// Z-Indices
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1050;
+$z-index-modal: 1055;

@@ -1,0 +1,35 @@
+@use 'variables' as *;
+
+.timeline-list {
+  border-left: 2px solid $slate-200;
+  margin-left: 8px;
+}
+.timeline-entry {
+  position: relative;
+}
+.timeline-dot {
+  width: $timeline-dot-size;
+  height: $timeline-dot-size;
+  left: -6px !important;
+  border: 2px solid $color-white;
+  box-shadow: 0 0 0 2px $color-primary;
+}
+
+.assignment-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(15 23 42 / 50%);
+}
+
+.assignment-dialog {
+  width: min(100%, 32rem);
+  padding: 1.5rem;
+  border-radius: $radius-lg;
+  background: $surface-card;
+  box-shadow: $shadow-lg;
+}

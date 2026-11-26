@@ -1,0 +1,77 @@
+@use 'variables' as *;
+
+mat-toolbar.portal-toolbar {
+  background: linear-gradient(135deg, $slate-900 0%, $slate-800 100%);
+  color: $color-white;
+  height: $navbar-height;
+  padding: 0;
+}
+.brand-logo {
+  width: $logo-size-md;
+  height: $logo-size-md;
+  border-radius: $radius-md;
+  background: rgba($color-brand-accent, 0.9);
+  color: $color-white;
+}
+.brand-title {
+  font-size: $font-size-lg;
+  line-height: $line-height-tight;
+  letter-spacing: $letter-spacing-tight;
+}
+.brand-subtitle {
+  font-size: $font-size-2xs;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+a.nav-link-btn {
+  color: rgba($color-white, 0.85);
+  font-weight: $font-weight-medium;
+  border-radius: $radius-sm;
+  font-size: $font-size-base;
+
+  &:hover {
+    background: rgba($color-white, 0.08);
+    color: $color-white;
+  }
+
+  &.active-nav-link {
+    background: rgba($color-white, 0.15);
+    color: $color-white;
+  }
+}
+.socket-status-chip {
+  background: rgba($color-black, 0.35);
+  border: 1px solid rgba($color-white, 0.15);
+  cursor: pointer;
+}
+.status-dot {
+  width: $status-dot-size;
+  height: $status-dot-size;
+}
+.dot-connected {
+  background-color: $color-success;
+  box-shadow: $shadow-glow-success;
+}
+.dot-connecting {
+  background-color: $color-warning;
+}
+.dot-disconnected {
+  background-color: $color-danger;
+}
+button.role-menu-button {
+  color: $color-white;
+  height: $button-height-md;
+  padding: 0 10px;
+}
+.role-menu-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.role-menu-name {
+  max-width: 130px;
+}
+.role-menu-dropdown-icon {
+  flex: none;
+}

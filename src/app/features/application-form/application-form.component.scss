@@ -1,0 +1,39 @@
+@use 'variables' as *;
+
+.cursor-pointer {
+  cursor: pointer;
+}
+.step-item {
+  position: relative;
+  z-index: 1;
+}
+.step-circle {
+  width: $step-circle-size;
+  height: $step-circle-size;
+  border-radius: $radius-circle;
+  background-color: $slate-200;
+  color: $slate-500;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  transition: $transition-smooth;
+}
+.step-item.active .step-circle {
+  background-color: $color-primary;
+  color: $color-white;
+  box-shadow: $shadow-focus-ring;
+}
+.step-item.completed .step-circle {
+  background-color: $color-success;
+  color: $color-white;
+}
+.step-label {
+  color: $slate-500;
+  font-size: $font-size-sm;
+}
+.step-item.active .step-label {
+  color: $color-primary;
+  font-weight: $font-weight-bold;
+}
+.step-item.completed .step-label {
+  color: $color-success;
+}

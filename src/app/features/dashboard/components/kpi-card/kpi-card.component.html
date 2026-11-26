@@ -1,0 +1,17 @@
+<mat-card
+  class="status-kpi-card portal-neutral-card h-100 cursor-pointer"
+  [class.active-filter]="isActive()"
+  (click)="onClick()"
+  tabindex="0"
+  role="button"
+  (keydown.enter)="onClick()"
+  (keydown.space)="onClick()"
+>
+  <mat-card-content class="p-3">
+    <div [class]="titleClass() + ' text-uppercase fw-bold'">{{ title() }}</div>
+    <div [class]="'h3 fw-bold mb-0 ' + countClass()">{{ count() }}</div>
+    @if (subtitle()) {
+      <div class="small text-muted mt-1">{{ subtitle() }}</div>
+    }
+  </mat-card-content>
+</mat-card>

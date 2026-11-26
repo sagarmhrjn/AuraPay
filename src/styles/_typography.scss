@@ -1,0 +1,36 @@
+// AuraPay Design System - Typography Tokens
+
+// Font Families
+$font-family-primary: 'Gilmer', 'Gilmer Regular', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+$font-family-headings: 'Gilmer', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-family-mono: "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+// Font Weights
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-heavy: 800;
+
+// Font Sizes
+$font-size-2xs: 0.68rem;  // brand subtitle
+$font-size-xs: 0.75rem;   // badges, small notes, action buttons
+$font-size-sm: 0.775rem;  // table headers, small code
+$font-size-base: 0.875rem;// nav links, buttons, regular card body
+$font-size-md: 1rem;      // default root body text
+$font-size-lg: 1.15rem;   // brand title, card subtitles
+$font-size-xl: 1.25rem;   // section headings
+$font-size-2xl: 1.5rem;   // page titles
+
+// Line Heights
+$line-height-tight: 1.1;
+$line-height-snug: 1.35;
+$line-height-normal: 1.5;
+$line-height-code: 1.55;
+
+// Letter Spacing
+$letter-spacing-tight: -0.02em;
+$letter-spacing-heading: -0.01em;
+$letter-spacing-normal: 0;
+$letter-spacing-badge: 0.02em;
+$letter-spacing-wide: 0.04em;

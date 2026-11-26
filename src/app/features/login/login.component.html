@@ -1,0 +1,79 @@
+<div class="login-wrapper d-flex align-items-center justify-content-center min-vh-100 py-4 px-3">
+  <div class="login-container w-100" style="max-width: 520px;">
+    <!-- Brand Header -->
+    <div class="text-center mb-4">
+      <h1 class="h3 fw-bold text-dark mb-1">AuraPay</h1>
+    </div>
+
+    <!-- Login Card -->
+    <mat-card class="elevation-z3 p-4 border-0 rounded-4">
+      <mat-card-header class="px-0 pt-0 pb-3">
+        <mat-card-title class="h5 fw-bold mb-1">Sign In</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="px-0">
+        <!-- Error Alert -->
+        @if (errorMessage()) {
+        <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-3 small rounded-3" role="alert">
+          <mat-icon class="text-danger">error_outline</mat-icon>
+          <div>{{ errorMessage() }}</div>
+        </div>
+        }
+
+        <!-- Login Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+          <!-- Email / Username -->
+          <mat-form-field appearance="outline" class="w-100 mb-2">
+            <mat-label>Email or Username</mat-label>
+            <mat-icon matPrefix class="text-muted me-2">email</mat-icon>
+            <input matInput type="text" formControlName="email" placeholder="e.g. aayush.shrestha@aurapay.np"
+              autocomplete="username" />
+            @if (loginForm.get('email')?.touched && loginForm.get('email')?.hasError('required')) {
+            <mat-error>Email or username is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Password -->
+          <mat-form-field appearance="outline" class="w-100 mb-2">
+            <mat-label>Password</mat-label>
+            <mat-icon matPrefix class="text-muted me-2">lock</mat-icon>
+            <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password"
+              placeholder="Enter your password" autocomplete="current-password" />
+            <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()"
+              [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'" tabindex="-1">
+              <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')) {
+            <mat-error>Password is required</mat-error>
+            }
+            @if (loginForm.get('password')?.touched && loginForm.get('password')?.hasError('minlength')) {
+            <mat-error>Password must be at least 4 characters</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Remember Me -->
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <mat-checkbox formControlName="rememberMe" color="primary">
+              <span class="small text-secondary">Remember session on this device</span>
+            </mat-checkbox>
+          </div>
+
+          <!-- Submit Button -->
+          <button mat-flat-button color="primary" type="submit"
+            class="w-100 py-2 d-flex align-items-center justify-content-center rounded-3 fs-6" [disabled]="loading()">
+            @if (loading()) {
+            <span class="d-inline-flex align-items-center">
+              <mat-spinner diameter="20" class="me-2"></mat-spinner>
+              <span>Verifying JWT Credentials...</span>
+            </span>
+            } @else {
+            <span class="d-inline-flex align-items-center fw-bold fs-5">
+              <span>Sign In</span>
+            </span>
+            }
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div class="container-fluid px-3 px-md-4 py-4">
+  <!-- Page Header -->
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+      <h2 class="h3 fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+        <span>Dashboard</span>
+      </h2>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <!-- Permission-aware 'New Application' button -->
+      @if (authService.hasPermission('CAN_CREATE_APPLICATION')) {
+      <a mat-flat-button color="portal-secondary" routerLink="/applications/new"
+        class="d-inline-flex align-items-center">
+        <mat-icon>add</mat-icon>
+        <span>New Merchant Application</span>
+      </a>
+      }
+    </div>
+  </div>
+
+  <!-- KPI Status Cards (Requirement F) -->
+  @if (applicationService.statusCounts(); as counts) {
+  <div class="row g-3 mb-4">
+    @for (card of kpiCards; track card.status) {
+    <div class="col-6 col-md-4 col-xl-2">
+      <app-kpi-card [title]="card.title" [count]="counts[card.countKey]" [subtitle]="card.subtitle"
+        [titleClass]="card.titleClass" [countClass]="card.countClass" [isActive]="selectedStatus === card.status"
+        (cardClick)="filterByStatus(card.status)" />
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Filter & Search Toolbar (Material Form Controls) -->
+  <mat-card class="mb-4 dashboard-filter-card portal-neutral-card">
+    <mat-card-content class="p-3">
+      <div class="row g-2 align-items-center">
+        <!-- Search Input -->
+        <div class="col-md-4 col-lg-3">
+          <app-search-input placeholder="Search merchant, DBA, ID..." [(value)]="searchTerm"
+            (inputChange)="onSearchInput()" (search)="applyFilters()" />
+        </div>
+
+        <!-- Status Dropdown -->
+        <div class="col-6 col-md-3 col-lg-2">
+          <app-dropdown label="Status" [options]="statusOptions" [(value)]="selectedStatus"
+            (selectionChange)="applyFilters()" />
+        </div>
+
+        <!-- Risk Tier Dropdown -->
+        <div class="col-6 col-md-3 col-lg-2">
+          <app-dropdown label="Risk Tier" [options]="riskTierOptions" [(value)]="selectedRiskTier"
+            (selectionChange)="applyFilters()" />
+        </div>
+
+        <!-- Action buttons -->
+        <div class="col-auto ms-auto d-flex gap-2">
+          <button mat-stroked-button type="button" (click)="resetFilters()">
+            Reset
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Main Data Table Container -->
+  <app-application-table [applications]="applicationService.applications()" [loading]="applicationService.loading()"
+    [error]="applicationService.error()" [totalItems]="applicationService.totalItems()"
+    [currentPage]="applicationService.currentPage()" [pageSize]="applicationService.pageSize()"
+    [totalPages]="applicationService.totalPages()" (retry)="retry()" (clearFilters)="resetFilters()"
+    (pageChange)="goToPage($event)" (pageSizeChange)="onPageSizeChange($event)" />
+</div>

@@ -1,0 +1,16 @@
+<mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic" class="w-100">
+  <mat-label class="text-muted">{{ placeholder() }}</mat-label>
+  <input
+    matInput
+    type="text"
+    [ngModel]="value()"
+    (ngModelChange)="value.set($event); onInput()"
+    (keyup.enter)="onEnter()"
+  />
+  <mat-icon matPrefix class="text-muted me-1">search</mat-icon>
+  @if (value()) {
+    <button matSuffix mat-icon-button (click)="clear()" aria-label="Clear search">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+</mat-form-field>

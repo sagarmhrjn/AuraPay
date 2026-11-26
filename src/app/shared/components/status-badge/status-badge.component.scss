@@ -1,0 +1,12 @@
+@use 'variables' as *;
+
+mat-icon.status-mat-icon {
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+}
+.badge {
+  font-size: $font-size-xs;
+  letter-spacing: $letter-spacing-badge;
+}

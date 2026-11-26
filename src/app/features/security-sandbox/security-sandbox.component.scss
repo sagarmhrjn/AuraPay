@@ -1,0 +1,5 @@
+@use 'variables' as *;
+
+.trace-console {
+  @include custom-scrollbar(6px, transparent, $slate-600, $slate-500);
+}

@@ -1,0 +1,13 @@
+@if (status()) {
+  <span class="badge rounded-pill d-inline-flex align-items-center gap-1 px-2.5 py-1.5 mat-elevation-z1" [ngClass]="statusBadgeClass()">
+    <mat-icon class="status-mat-icon">{{ statusMatIcon() }}</mat-icon>
+    <span class="fw-semibold">{{ statusLabel() }}</span>
+  </span>
+}
+
+@if (riskTier()) {
+  <span class="badge rounded-pill d-inline-flex align-items-center gap-1 px-2.5 py-1.5 mat-elevation-z1" [ngClass]="riskBadgeClass()">
+    <mat-icon class="status-mat-icon">{{ riskMatIcon() }}</mat-icon>
+    <span>Risk: {{ riskTier() }}</span>
+  </span>
+}

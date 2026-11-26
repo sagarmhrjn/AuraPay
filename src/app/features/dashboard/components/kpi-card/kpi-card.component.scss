@@ -1,0 +1,25 @@
+@use 'variables' as *;
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.status-kpi-card {
+  transition: transform $transition-fast, box-shadow $transition-fast;
+  border: 1px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+
+  &.active-filter {
+    border: 2px solid $color-primary-light;
+    background-color: $color-primary-subtle;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

@@ -1,0 +1,54 @@
+<div class="sensitive-reveal-box p-2 rounded bg-light border">
+  <div class="d-flex align-items-center justify-content-between gap-2">
+    <div class="d-flex align-items-center gap-2">
+      <mat-icon class="text-primary fs-5" style="width: 20px; height: 20px; line-height: 20px;">lock</mat-icon>
+      <span class="font-monospace text-dark fw-semibold">
+        @if (isRevealed()) {
+          <span class="text-danger-emphasis">{{ rawValue() }}</span>
+        } @else {
+          <span class="text-secondary">{{ rawValue() | maskSensitive: fieldType() }}</span>
+        }
+      </span>
+      <span class="badge bg-secondary-subtle text-secondary-emphasis font-monospace" style="font-size: 0.65rem;">
+        @if (isRevealed()) {
+          REVEALED ({{ remainingSeconds() }}s)
+        } @else {
+          MASKED
+        }
+      </span>
+    </div>
+
+    <div>
+      @if (isRevealed()) {
+        <button
+          mat-stroked-button
+          type="button"
+          class="reveal-action-btn"
+          (click)="hide()"
+          title="Re-mask immediately"
+        >
+          <mat-icon class="action-icon">visibility_off</mat-icon>
+          <span>Hide</span>
+        </button>
+      } @else {
+        <button
+          mat-stroked-button
+          type="button"
+          class="reveal-action-btn"
+          (click)="attemptReveal()"
+          title="Reveal sensitive data (Role verification required)"
+        >
+          <mat-icon class="action-icon">visibility</mat-icon>
+          <span>Reveal</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (accessDeniedMessage()) {
+    <div class="alert alert-danger py-1 px-2 mt-2 mb-0 d-flex align-items-center gap-2" style="font-size: 0.775rem;">
+      <mat-icon class="text-danger" style="font-size: 16px; width: 16px; height: 16px;">gpp_bad</mat-icon>
+      <span>{{ accessDeniedMessage() }}</span>
+    </div>
+  }
+</div>

@@ -1,0 +1,46 @@
+@use 'variables' as *;
+
+// Support dark navy button for color="portal-secondary"
+a.mat-mdc-flat-button[color='portal-secondary'],
+button.mat-mdc-flat-button[color='portal-secondary'],
+[mat-flat-button][color='portal-secondary'] {
+  --mdc-filled-button-container-color: #{$slate-900};
+  --mdc-filled-button-label-text-color: #{$color-white};
+  background-color: $slate-900;
+  color: $color-white;
+
+  .mat-icon {
+    color: $color-white;
+  }
+
+  &:hover {
+    --mdc-filled-button-container-color: #{$slate-800};
+    background-color: $slate-800;
+    color: $color-white;
+  }
+}
+
+.status-kpi-card {
+  transition: transform $transition-fast, box-shadow $transition-fast;
+  border: 1px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+
+  &.active-filter {
+    border: 2px solid $color-primary-light;
+    background-color: $color-primary-subtle;
+  }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
