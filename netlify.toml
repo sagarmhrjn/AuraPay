@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  # Angular's application builder outputs the browser bundle here
+  publish = "dist/merchant-payments-portal/browser"
+
+# Serve index.html for client-side (Angular Router) routes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
