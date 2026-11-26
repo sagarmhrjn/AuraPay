@@ -1,4 +1,4 @@
-# AuraPay Merchant Payments Portal (Nepal Standard Edition)
+# AuraPay Merchant Payments Portal
 
 A production-grade, enterprise-ready merchant onboarding, underwriting, and payments risk management portal built with **Angular 20+**, **Standalone Components**, **Signals**, **RxJS**, **Reactive Forms**, and **Vitest + Angular TestBed**, localized for the **Nepalese Financial & Payments Ecosystem** 
 
@@ -38,7 +38,7 @@ A production-grade, enterprise-ready merchant onboarding, underwriting, and paym
 
 ## 👥 User Roles & Personas Matrix
 
-| Capability / Permission | SALES (Aayush Shrestha) | REVIEWER (Pradeep Adhikari) | ADMIN (Binod Sharma) | Enforcement Mechanism |
+| Capability / Permission | SALES | REVIEWER | ADMIN | Enforcement Mechanism |
 | :--- | :---: | :---: | :---: | :--- |
 | **Create Merchant Application** | ✅ | ❌ | ✅ | Route Guard (`permissionGuard`) & `@if` in Navbar/Dashboard |
 | **Edit Application Draft** | Permitted Only | ❌ | ✅ | `canEditApplication()` check (status must be DRAFT or INFO_REQUESTED) |
@@ -47,7 +47,7 @@ A production-grade, enterprise-ready merchant onboarding, underwriting, and paym
 | **Manage Reviewer Assignments** | ❌ | ❌ | ✅ | Controlled by `CAN_MANAGE_ASSIGNMENTS` permission |
 | **Reveal Masked PII / Banking Numbers** | ❌ (Access Denied) | ✅ (30s timer) | ✅ (30s timer) | `SensitiveRevealComponent` with audit logging |
 
-> **Interactive Persona Switcher**: Use the user profile dropdown in the top-right navbar to switch between **Aayush Shrestha (SALES)**, **Pradeep Adhikari (REVIEWER)**, and **Binod Sharma (ADMIN)** to evaluate all role-specific permissions live in real-time.
+> **Interactive Persona Switcher**: Use the user profile dropdown in the top-right navbar to switch between **SALES**, **REVIEWER**, and **ADMIN** to evaluate all role-specific permissions live in real-time.
 
 ---
 
