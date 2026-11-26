@@ -44,6 +44,7 @@ describe('App Component', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('mat-toolbar')).toBeTruthy();
     expect(compiled.querySelector('app-footer')).toBeTruthy();
+    expect(compiled.querySelector('main')?.classList.contains('container')).toBe(true);
     expect(compiled.textContent).toContain('AuraPay');
   });
 
@@ -58,5 +59,7 @@ describe('App Component', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-navbar')).toBeNull();
     expect(compiled.querySelector('app-footer')).toBeNull();
+    expect(compiled.querySelector('main')?.classList.contains('container-fluid')).toBe(true);
+    expect(compiled.querySelector('main')?.classList.contains('container')).toBe(false);
   });
 });
