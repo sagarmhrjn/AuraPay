@@ -4,6 +4,38 @@ A production-grade, enterprise-ready merchant onboarding, underwriting, and paym
 
 ---
 
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js and npm
+
+### Install and run
+
+```bash
+# Install dependencies from the lockfile
+npm ci
+
+# Start the Angular development server
+npm start
+```
+
+Open [http://localhost:4200](http://localhost:4200) in your browser. The development build uses the app's mock API, so no separate backend or environment configuration is needed.
+
+### Demo sign-in credentials
+
+Use these accounts on the sign-in page to try each role:
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| SALES | `aayush.shrestha@aurapay.np` | `Password123!` |
+| REVIEWER | `pradeep.adhikari@aurapay.np` | `Password123!` |
+| ADMIN | `sagar.maharjan@aurapay.np` | `Password123!` |
+
+These are mock development accounts, not production credentials. The login page also provides quick-login buttons for each demo role.
+
+---
+
 ##  Fintech & Regulatory Localization
 
 | Domain / Dimension | US Standard (Previous) | Nepalese Standard (Active) | Compliance & Regulatory Authority |
