@@ -73,26 +73,30 @@ export class SocketService {
   ): void {
     if (this.connectionState() !== 'CONNECTED') return;
 
-    if (type === 'STATUS_CHANGED') {
-      this.emit('application:status_changed', {
-        applicationId: appId,
-        newStatus: 'UNDER_REVIEW',
-        reviewerName: 'Jeshan Joshi',
-        message: `Application ${appId} moved to UNDER_REVIEW by risk engine.`,
-      });
-    } else if (type === 'NEW_APPLICATION') {
-      this.emit('application:new', {
-        applicationId: `APP-2026-${Math.floor(2000 + Math.random() * 8000)}`,
-        legalName: 'Apex Cloud Logistics LLC',
-        salesRep: 'Sarah Jenkins',
-        message: 'New merchant application submitted via merchant onboarding API.',
-      });
-    } else if (type === 'REVIEWER_ASSIGNED') {
-      this.emit('application:assigned', {
-        applicationId: appId,
-        assignedTo: 'Jeshan Joshi',
-        message: `Application ${appId} assigned to Jeshan Joshi.`,
-      });
+    switch (type) {
+      case 'STATUS_CHANGED':
+        this.emit('application:status_changed', {
+          applicationId: appId,
+          newStatus: 'UNDER_REVIEW',
+          reviewerName: 'Jeshan Joshi',
+          message: `Application ${appId} moved to UNDER_REVIEW by risk engine.`,
+        });
+        break;
+      case 'NEW_APPLICATION':
+        this.emit('application:new', {
+          applicationId: `APP-2026-${Math.floor(2000 + Math.random() * 8000)}`,
+          legalName: 'Apex Cloud Logistics LLC',
+          salesRep: 'Sarah Jenkins',
+          message: 'New merchant application submitted via merchant onboarding API.',
+        });
+        break;
+      case 'REVIEWER_ASSIGNED':
+        this.emit('application:assigned', {
+          applicationId: appId,
+          assignedTo: 'Jeshan Joshi',
+          message: `Application ${appId} assigned to Jeshan Joshi.`,
+        });
+        break;
     }
   }
 

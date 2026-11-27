@@ -21,12 +21,15 @@ export class UnauthorizedComponent {
 
   /** Cycles the demo user through roles to show role-dependent access. */
   switchRolePrompt(): void {
-    if (this.authService.userRole() === 'SALES') {
-      this.authService.switchUserRole('REVIEWER');
-    } else if (this.authService.userRole() === 'REVIEWER') {
-      this.authService.switchUserRole('ADMIN');
-    } else {
-      this.authService.switchUserRole('SALES');
+    switch (this.authService.userRole()) {
+      case 'SALES':
+        this.authService.switchUserRole('REVIEWER');
+        break;
+      case 'REVIEWER':
+        this.authService.switchUserRole('ADMIN');
+        break;
+      default:
+        this.authService.switchUserRole('SALES');
     }
   }
 }

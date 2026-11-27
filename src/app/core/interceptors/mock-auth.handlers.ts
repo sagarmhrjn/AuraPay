@@ -17,26 +17,24 @@ export function handleMockAuthRequest(
     const password = body?.password || '';
 
     let matchedUser: User | undefined;
-    if (
-      emailInput === 'sales' ||
-      emailInput === 'sales@aurapay.np' ||
-      emailInput === MOCK_USERS.SALES[0].email.toLowerCase()
-    ) {
-      matchedUser = MOCK_USERS.SALES[0];
-    } else if (
-      emailInput === 'reviewer' ||
-      emailInput === 'reviewer@aurapay.np' ||
-      emailInput === MOCK_USERS.REVIEWER[0].email.toLowerCase()
-    ) {
-      matchedUser = MOCK_USERS.REVIEWER[0];
-    } else if (
-      emailInput === 'admin' ||
-      emailInput === 'admin@aurapay.np' ||
-      emailInput === MOCK_USERS.ADMIN.email.toLowerCase()
-    ) {
-      matchedUser = MOCK_USERS.ADMIN;
-    } else {
-      matchedUser = mockUserAccounts.find((user) => user.email.toLowerCase() === emailInput);
+    switch (emailInput) {
+      case 'sales':
+      case 'sales@aurapay.np':
+      case MOCK_USERS.SALES[0].email.toLowerCase():
+        matchedUser = MOCK_USERS.SALES[0];
+        break;
+      case 'reviewer':
+      case 'reviewer@aurapay.np':
+      case MOCK_USERS.REVIEWER[0].email.toLowerCase():
+        matchedUser = MOCK_USERS.REVIEWER[0];
+        break;
+      case 'admin':
+      case 'admin@aurapay.np':
+      case MOCK_USERS.ADMIN.email.toLowerCase():
+        matchedUser = MOCK_USERS.ADMIN;
+        break;
+      default:
+        matchedUser = mockUserAccounts.find((user) => user.email.toLowerCase() === emailInput);
     }
 
     if (!matchedUser || !password || password.length < 4) {

@@ -254,17 +254,28 @@ export function handleMockApplicationRequest(
     const payload = req.body as RiskDecisionPayload;
     const previousStatus = target.status;
     let newStatus: ApplicationStatus = target.status;
+    let decisionAction: 'APPROVED' | 'REJECTED' | 'REQUEST_INFO';
 
-    if (payload.action === 'APPROVE') {
-      newStatus = 'APPROVED';
-      if (payload.riskTier) {
-        target.riskAssessment.riskTier = payload.riskTier;
-      }
-    } else if (payload.action === 'REJECT') {
-      newStatus = 'REJECTED';
-      target.riskAssessment.rejectionReasonCode = payload.rejectionReasonCode || 'RISK_POLICY_EXPOSURE';
-    } else if (payload.action === 'REQUEST_INFO') {
-      newStatus = 'INFO_REQUESTED';
+    switch (payload.action) {
+      case 'APPROVE':
+        newStatus = 'APPROVED';
+        decisionAction = 'APPROVED';
+        if (payload.riskTier) {
+          target.riskAssessment.riskTier = payload.riskTier;
+        }
+        break;
+      case 'REJECT':
+        newStatus = 'REJECTED';
+        decisionAction = 'REJECTED';
+        target.riskAssessment.rejectionReasonCode =
+          payload.rejectionReasonCode || 'RISK_POLICY_EXPOSURE';
+        break;
+      case 'REQUEST_INFO':
+        newStatus = 'INFO_REQUESTED';
+        decisionAction = 'REQUEST_INFO';
+        break;
+      default:
+        decisionAction = 'REQUEST_INFO';
     }
 
     target.status = newStatus;
@@ -276,12 +287,7 @@ export function handleMockApplicationRequest(
       actorId: 'usr-rev-02',
       actorName: 'Jeshan Joshi',
       actorRole: 'REVIEWER',
-      action:
-        payload.action === 'APPROVE'
-          ? 'APPROVED'
-          : payload.action === 'REJECT'
-            ? 'REJECTED'
-            : 'REQUEST_INFO',
+      action: decisionAction,
       previousStatus,
       newStatus,
       note: payload.note,

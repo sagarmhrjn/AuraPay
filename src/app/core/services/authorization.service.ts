@@ -30,16 +30,20 @@ export class AuthorizationService {
   canAccessApplication(application: MerchantApplication): boolean {
     const user = this.session.currentUser();
     if (!user || !user.role) return false;
-    if (user.role === 'ADMIN') {
-      return true;
+
+    switch (user.role) {
+      case 'ADMIN':
+        return true;
+      case 'REVIEWER':
+        return application.assignedReviewerId === user.id;
+      case 'SALES':
+        return (
+          application.salesRepId === user.id ||
+          (user.assignedMerchantIds?.includes(application.id) ?? false)
+        );
+      default:
+        return false;
     }
-    if (user.role === 'REVIEWER') {
-      return application.assignedReviewerId === user.id;
-    }
-    return (
-      application.salesRepId === user.id ||
-      (user.assignedMerchantIds?.includes(application.id) ?? false)
-    );
   }
 
   /** Determines whether the active user may edit a particular application. */

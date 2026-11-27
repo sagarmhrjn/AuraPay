@@ -76,9 +76,15 @@ export const MOCK_USERS: {
 };
 
 export function getDefaultMockUser(role: UserRole): User {
-  if (role === 'SALES') return MOCK_USERS.SALES[0];
-  if (role === 'REVIEWER') return MOCK_USERS.REVIEWER[0];
-  return MOCK_USERS.ADMIN;
+  switch (role) {
+    case 'SALES':
+      return MOCK_USERS.SALES[0];
+    case 'REVIEWER':
+      return MOCK_USERS.REVIEWER[0];
+    case 'ADMIN':
+    default:
+      return MOCK_USERS.ADMIN;
+  }
 }
 
 export const INITIAL_MOCK_APPLICATIONS: MerchantApplication[] = [
