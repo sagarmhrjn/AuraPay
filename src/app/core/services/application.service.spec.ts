@@ -22,11 +22,12 @@ describe('ApplicationService Filtering & Querying', () => {
 
     // Initial setup requests in constructor
     const initReq = httpMock.expectOne((req) => req.url === '/api/applications');
+    expect(initReq.request.params.get('pageSize')).toBe('10');
     initReq.flush({
       items: [],
       total: 0,
       page: 1,
-      pageSize: 5,
+      pageSize: 10,
       totalPages: 1,
     });
 
@@ -40,6 +41,10 @@ describe('ApplicationService Filtering & Querying', () => {
       approved: 1,
       rejected: 0,
     });
+  });
+
+  it('should default to 10 applications per page', () => {
+    expect(service.pageSize()).toBe(10);
   });
 
   afterEach(() => {

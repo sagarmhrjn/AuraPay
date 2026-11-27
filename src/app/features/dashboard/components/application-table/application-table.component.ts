@@ -36,7 +36,7 @@ export class ApplicationTableComponent {
   readonly error = input<string | null>(null);
   readonly totalItems = input<number>(0);
   readonly currentPage = input<number>(1);
-  readonly pageSize = input<number>(5);
+  readonly pageSize = input<number>(10);
   readonly totalPages = input<number>(1);
 
   readonly retry = output<void>();

@@ -21,7 +21,7 @@ export class ApplicationService {
   readonly error = signal<string | null>(null);
   readonly totalItems = signal<number>(0);
   readonly currentPage = signal<number>(1);
-  readonly pageSize = signal<number>(5);
+  readonly pageSize = signal<number>(10);
   readonly totalPages = signal<number>(1);
   readonly statusCounts = signal<DashboardStatusCounts>({
     total: 0,
@@ -36,7 +36,7 @@ export class ApplicationService {
   // Filter query subject for reactive data flow
   private readonly filterSubject = new BehaviorSubject<ApplicationQueryFilter>({
     page: 1,
-    pageSize: 5,
+    pageSize: 10,
     status: 'ALL',
     riskTier: 'ALL',
     searchTerm: '',
