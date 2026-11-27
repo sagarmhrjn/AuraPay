@@ -74,7 +74,7 @@ These are mock development accounts, not production credentials.
 
 ---
 
-## 👥 User Roles & Personas Matrix
+## 👥 User Roles & Permission Matrix
 
 | Capability / Permission | SALES | REVIEWER | ADMIN | Enforcement Mechanism |
 | :--- | :---: | :---: | :---: | :--- |
@@ -84,8 +84,6 @@ These are mock development accounts, not production credentials.
 | **Underwriting & Risk Decisions** | ❌ (Strictly Hidden) | ✅ | ✅ | Hidden from DOM via `@if (authService.hasPermission('CAN_RECORD_RISK_DECISION'))` |
 | **Manage Reviewer Assignments** | ❌ | ❌ | ✅ | Controlled by `CAN_MANAGE_ASSIGNMENTS` permission |
 | **Reveal Masked PII / Banking Numbers** | ❌ (Access Denied) | ✅ (30s timer) | ✅ (30s timer) | `SensitiveRevealComponent` with audit logging |
-
-> **Interactive Persona Switcher**: Use the user profile dropdown in the top-right navbar to switch between **SALES**, **REVIEWER**, and **ADMIN** to evaluate all role-specific permissions live in real-time.
 
 ---
 
