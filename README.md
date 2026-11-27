@@ -4,6 +4,12 @@ A production-grade, enterprise-ready merchant onboarding, underwriting, and paym
 
 ---
 
+## 🌐 Live Demo
+
+Try the working app: [AuraPay Merchant Payments Portal](https://aurapay-u2q5.netlify.app/login)
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -32,13 +38,13 @@ Use these accounts on the sign-in page to try each role:
 | REVIEWER | `pradeep.adhikari@aurapay.np` | `Password123!` |
 | ADMIN | `sagar.maharjan@aurapay.np` | `Password123!` |
 
-These are mock development accounts, not production credentials. The login page also provides quick-login buttons for each demo role.
+These are mock development accounts, not production credentials.
 
 ---
 
 ##  Fintech & Regulatory Localization
 
-| Domain / Dimension | US Standard (Previous) | Nepalese Standard (Active) | Compliance & Regulatory Authority |
+| Domain / Dimension | US Standard | Nepalese Standard | Compliance & Regulatory Authority |
 | :--- | :--- | :--- | :--- |
 | **Tax Identification** | IRS EIN (`XX-XXXXXXX`) | **Permanent Account Number (PAN)** (9-digit numeric `601234567`) | Inland Revenue Department (IRD) |
 | **Principal / KYC** | Social Security Number (SSN) | **Citizenship Certificate No.** / National ID (NID) | Ministry of Home Affairs / NRB FIU GoAML |
@@ -102,6 +108,12 @@ These are mock development accounts, not production credentials. The login page 
 ```
 
 Test this live under **Security & 401 Mutex** (`/security-sandbox`) using the **"Fire 5 Concurrent 401 Requests"** runner.
+
+---
+
+## 🤖 AI Coding Assistance
+
+ChatGPT and Copilot were used as AI coding assistants during the development of this project.
 
 ---
 
